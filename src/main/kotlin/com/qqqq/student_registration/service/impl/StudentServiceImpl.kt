@@ -4,6 +4,7 @@ import com.qqqq.student_registration.dto.Student
 import com.qqqq.student_registration.model.entity.StudentEntity
 import com.qqqq.student_registration.model.repository.StudentRepository
 import com.qqqq.student_registration.service.StudentService
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.lang.Exception
@@ -24,7 +25,7 @@ class StudentServiceImpl(
             this.group = student.group
         }
         studentRepository.save(studentEntity)
-
+        logger.info("Создан новый студент id ${studentEntity.id}")
         return studentEntity.id ?: 0
     }
 
@@ -34,6 +35,7 @@ class StudentServiceImpl(
         if( studentOpt.isPresent ) {
             return studentOpt.get()
         } else {
+            logger.error("Не найден студент id $id")
             throw Exception("Студента с таким ID не существует")
         }
     }
@@ -57,6 +59,7 @@ class StudentServiceImpl(
 
             return editedStudent
         } else {
+            logger.error("Не найден студент id $id")
             throw Exception("Студента с таким ID не существует")
         }
     }
@@ -64,11 +67,12 @@ class StudentServiceImpl(
     override fun removeStudent(id: Long) : Long {
         studentRepository.findById(id).ifPresent {
             studentRepository.delete(it)
+            logger.info("Удалена информация о студенте id $id")
         }
         return id
     }
 
     companion object {
-        private val logger = KotlinLoging.logger {}
+        private val logger = KotlinLogging.logger {}
     }
 }

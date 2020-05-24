@@ -22,8 +22,4 @@ class SwaggerConfig {
                     .build()
 
 
-    @Bean
-    fun returnList(): List<String> =
-            listOf("1", "2")
-
 }
